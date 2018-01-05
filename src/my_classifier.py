@@ -15,6 +15,7 @@ import pickle
 from nltk.classify import SklearnClassifier
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.svm import LinearSVC
+from prob_svm import LinearSVC_proba
 
 __author__ = 'lch02'
 
@@ -43,20 +44,28 @@ def create_classifier(featx):
     print train_set is None, '---train_set----', len(train_set)
     print test_set is None, '-----test_set--', len(test_set)
 
+    """
+    训练两个分类器
+    """
     nb_classifier = nltk.NaiveBayesClassifier.train(train_set)
     nba = nltk.classify.accuracy(nb_classifier, test_set)
-    print "NBayes accuracy is %.7f" % nba
+    print "NBayes accuracy is %.7f" % nba # 86.78%
 
-    svm_classifier = SklearnClassifier(LinearSVC()).train(train_set)
-    bnla = nltk.classify.accuracy(svm_classifier, test_set)
-    print "svm_classifier accuracy is %.7f" % bnla
+    svm_classifier = SklearnClassifier(LinearSVC_proba()).train(train_set)
+    svmm = nltk.classify.accuracy(svm_classifier, test_set)
+    print "svm_classifier accuracy is %.7f" % svmm # 89.124%
 
+    """
+    保存准确率更大的那个模型
+    """
     classifier_pkl = os.path.join(config.pkl_path, 'my_classifier.pkl')  # 消极语料
     with open(classifier_pkl, 'wb') as f:
-        if nba > bnla:
+        if nba > svmm:
             pickle.dump(nb_classifier, f)
+            print 'NBayes'
         else:
             pickle.dump(svm_classifier, f)
+            print 'SVM'
 
     print 'done!'
 
