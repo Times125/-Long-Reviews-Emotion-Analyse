@@ -8,14 +8,11 @@
 """
 import config
 import os
-import itertools
 import nltk
 import pickle
 
 from nltk.classify import SklearnClassifier
-from sklearn.naive_bayes import BernoulliNB
 from sklearn.svm import LinearSVC
-from prob_svm import LinearSVC_proba
 
 __author__ = 'lch02'
 
@@ -51,9 +48,9 @@ def create_classifier(featx):
     nba = nltk.classify.accuracy(nb_classifier, test_set)
     print "NBayes accuracy is %.7f" % nba # 86.78%
 
-    svm_classifier = SklearnClassifier(LinearSVC_proba()).train(train_set)
+    svm_classifier = SklearnClassifier(LinearSVC()).train(train_set)
     svmm = nltk.classify.accuracy(svm_classifier, test_set)
-    print "svm_classifier accuracy is %.7f" % svmm # 89.124%
+    print "svm_classifier accuracy is %.7f" % svmm  # 89.124%
 
     """
     保存准确率更大的那个模型

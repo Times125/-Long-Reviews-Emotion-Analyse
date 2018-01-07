@@ -10,10 +10,10 @@ import pickle
 import os
 __author__ = 'lch02'
 
-pkl_path = r'E:\Repositories\Emotion-Analyse\Long-Reviews-Emotion-Analyse\pkl'
-test_path = r'E:\Repositories\Emotion-Analyse\Long-Reviews-Emotion-Analyse\test'
-train_path = r'E:\Repositories\Emotion-Analyse\Long-Reviews-Emotion-Analyse\train'
-other_path = r'E:\Repositories\Emotion-Analyse\Long-Reviews-Emotion-Analyse\other'
+pkl_path = os.path.join(os.path.abspath('..'), 'pkl')
+test_path = os.path.join(os.path.abspath('..'), 'test')
+train_path = os.path.join(os.path.abspath('..'), 'train')
+other_path = os.path.join(os.path.abspath('..'), 'other')
 
 # 最好的特征值
 best_words = []
