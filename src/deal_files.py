@@ -8,7 +8,7 @@
 """
 import re
 
-from nltk import regexp_tokenize
+from nltk import regexp_tokenize, pos_tag, WordNetLemmatizer
 from nltk.corpus import stopwords
 from config import *
 from multiprocessing import Pool
@@ -120,6 +120,7 @@ def deal_doc(cat, fn):
 文本处理：取词、去停用词等
 """
 def text_parse(input_text, language='en'):
+    lemmatizer = WordNetLemmatizer()  # 词形还原
     sentence = input_text.strip().lower()
     sentence = re.sub(r'@\s*[\w]+ | ?#[\w]+ | ?&[\w]+; | ?[^\x00-\xFF]+', '', sentence)
     special_tag = set(
@@ -128,7 +129,16 @@ def text_parse(input_text, language='en'):
                   | \d+(?:\.\d+)?%?\w+
                   | \w+(?:[-']\w+)*"""
 
+    tag_list = set(['TO', 'RB', 'RBR', 'RBRS', 'UH', 'WDT', 'WP', 'WP$', 'WRB', 'SYM', 'RP', 'PRP', 'PRP$', 'CD', 'POS', ':'])
     word_list = regexp_tokenize(sentence, pattern)
     if language == 'en':
         filter_word = [w for w in word_list if w not in stopwords.words('english') and w not in special_tag]  # 去停用词和特殊标点符号
-        return filter_word
+    word_tag = pos_tag(filter_word, tagset=None, lang=language)  # 词性标注，返回标记列表[('Codeine', 'NNP'), ('15mg', 'CD')
+    res_word_list = []
+    for i in range(0, len(word_tag)):  # 去掉副词、介词、小品词、疑问词、代词、人称代词、所有格代名词等
+        if word_tag[i][1] in tag_list:
+            continue
+        else:
+            word = lemmatizer.lemmatize(word_tag[i][0])
+            res_word_list.append(word)
+    return res_word_list
