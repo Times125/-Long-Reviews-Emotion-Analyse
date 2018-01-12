@@ -46,7 +46,7 @@ def create_classifier(featx):
     """
     nb_classifier = nltk.NaiveBayesClassifier.train(train_set)
     nba = nltk.classify.accuracy(nb_classifier, test_set)
-    print "NBayes accuracy is %.7f" % nba # 86.78%
+    print "NBayes accuracy is %.7f" % nba  # 86.78%
 
     svm_classifier = SklearnClassifier(LinearSVC()).train(train_set)
     svmm = nltk.classify.accuracy(svm_classifier, test_set)
